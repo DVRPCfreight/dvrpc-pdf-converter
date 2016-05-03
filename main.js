@@ -7,17 +7,25 @@ var mainWindow = null;
 
 app.on('ready', function() {
     mainWindow = new BrowserWindow({
-        frame: false,
-        height: 680,
+        // frame: false,
+        'auto-hide-menu-bar': true,
+        'use-content-size': true,
+        height: 760,
         width: 960
     });
 
     mainWindow.loadUrl('file://' + __dirname + '/app/index.html');
+    mainWindow.focus();
 });
 
 var ipc = require('ipc');
 
 ipc.on('close-main-window', function () {
     app.quit();
+});
+
+// Quit when all windows are closed.
+app.on('window-all-closed', function() {
+  app.quit();
 });
 

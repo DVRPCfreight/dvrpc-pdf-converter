@@ -198,10 +198,10 @@ function updateConvertButton(e) {
 
 var ipc = require('ipc');
 
-var closeEl = document.querySelector('.close');
-closeEl.addEventListener('click', function () {
-    ipc.send('close-main-window');
-});
+// var closeEl = document.querySelector('.close');
+// closeEl.addEventListener('click', function () {
+//     ipc.send('close-main-window');
+// });
 
 var remote = require('remote'); 
 var dialog = remote.require('dialog');
