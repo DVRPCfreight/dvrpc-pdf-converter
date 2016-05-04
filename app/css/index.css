@@ -272,6 +272,9 @@ fieldset {
 .success {
     fill: #00a65a;
 }
+.error {
+    fill: #dd4b39;
+}
 
 #progress-card {
     height: 80px;
