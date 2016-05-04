@@ -11,7 +11,9 @@ var store_filenames = [];
 var output_location = '';
 var file_num = 0;
 
+
 var grid = document.querySelector('.grid');
+
 
 // getElementById
     function $id(id) {
@@ -109,12 +111,41 @@ function listFiles(files) {
     }
 }
 
+function constructResult (status, name) {
+    if (status === 'success') {
+        var content = '<div class="grid-item "><div class="grid-item-content"><img src="'+ output_location +'\\'+ name +'.png"/></div><div class="item-title">Report: '+ name +'</div></div>';
+    } else {
+        var content = '<div class="grid-item"><div class="grid-item-content"><img src=""/></div><div class="item-title">Report: '+ name +'</div></div>';
+    }
+    var wrapper= document.createElement('div');
+    
+    wrapper.innerHTML= content;
+
+    grid.insertBefore(wrapper, grid.firstChild);
+    
+    wrapper.style.display = "none";
+
+    imload(  grid, function() {
+        wrapper.style.display = "block";
+        // layout Masonry after each image loads
+        msnry.prepended( wrapper );
+        msnry.layout();
+    });
+}
+
+
+var success_counter = $id('complete-convert');
+var error_counter = $id('error-convert');
+
 function processFiles(){
 
     var _files = store_filenames;
     //pdf to png
     var i = 0;
     var len = _files.length;
+    var success = 0;
+    var errors = 0;
+
 
     function forloop(){
         if(i < len){
@@ -141,28 +172,17 @@ function processFiles(){
                         }
                         fs.writeFile(output_location +"\\"+ name +".png", resp.data, function(err) {
                             if (err) {
+                                constructResult('error', name);
+                                
                                 Output('Error in png conversion '+ err +'<br/>');
                                 i++; 
                                 setTimeout(forloop, 0);
                             }
                             else {
+                                constructResult('success', name);
 
-                                var wrapper= document.createElement('div');
-                                
-                                wrapper.innerHTML= '<div class="grid-item "><div class="grid-item-content"><img src="'+ output_location +'\\'+ name +'.png"/></div></div>';
-                            
-                                // grid.appendChild(wrapper);
-                                grid.insertBefore(wrapper, grid.firstChild);
-                                
-                                wrapper.style.display = "none";
-
-                                imload(  grid, function() {
-                                    wrapper.style.display = "block";
-                                    // layout Masonry after each image loads
-                                    msnry.prepended( wrapper );
-                                    msnry.layout();
-                                });
-
+                                success++;
+                                success_counter.innerHTML(success)
                                 
                                 Output('Report #'+ name +' cover converted.<br/>');
                                 i++; 
@@ -197,14 +217,15 @@ function updateConvertButton(e) {
 
 
 var ipc = require('ipc');
+var remote = require('remote'); 
+var dialog = remote.require('dialog');
+// var BrowserWindow = remote.require('browser-window');
 
 // var closeEl = document.querySelector('.close');
 // closeEl.addEventListener('click', function () {
 //     ipc.send('close-main-window');
 // });
 
-var remote = require('remote'); 
-var dialog = remote.require('dialog');
 
 var dia_btn = document.querySelector('.dialog-browser');
 dia_btn.addEventListener('click', function () {
@@ -247,3 +268,19 @@ var msnry = new ms( grid, {
     percentPosition: true
     // columnWidth: 200
 });
+
+
+// document.getElementById("min-btn").addEventListener("click", function (e) {
+//    var window = BrowserWindow.getFocusedWindow();
+//    window.minimize(); 
+// });
+
+// document.getElementById("max-btn").addEventListener("click", function (e) {
+//    var window = BrowserWindow.getFocusedWindow(); 
+//    window.maximize(); 
+// });
+
+// document.getElementById("close-btn").addEventListener("click", function (e) {
+//    var window = BrowserWindow.getFocusedWindow();
+//    window.close();
+// }); 
