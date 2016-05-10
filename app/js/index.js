@@ -33,10 +33,14 @@ var grid = document.querySelector('.grid');
 
         //update count
         file_num++;
-        var num = $id("file-count");
-        num.innerHTML = file_num;
+        fileCounter();
 
         updateConvertButton();
+    }
+
+    function fileCounter(files){
+        var num = $id("file-count");
+        num.innerHTML = file_num;
     }
 
 
@@ -101,7 +105,15 @@ var grid = document.querySelector('.grid');
         Init();
     }
 
-
+function updateInputs() {
+    //celar the list of files
+    var item_list = $id('input-file-list');
+    // item_list.removeChild(item_list.childNodes[0]);
+    var elements = item_list.getElementsByTagName('li');
+    item_list.removeChild(elements[0]);
+    file_num = file_num - 1;
+    fileCounter();
+}
 function listFiles(files) {
     for (var i = 0, len = files.length; i < len; i++) {
         store_filenames.push(files[i]);
@@ -109,28 +121,6 @@ function listFiles(files) {
         var file = filestr.splice(-1)[0];
         Files(file);
     }
-}
-
-function constructResult (status, name) {
-    if (status === 'success') {
-        var content = '<div class="grid-item "><div class="grid-item-content"><img src="'+ output_location +'\\'+ name +'.png"/></div><div class="item-title">Report: '+ name +'</div></div>';
-    } else {
-        var content = '<div class="grid-item"><div class="grid-item-content"><img src=""/></div><div class="item-title">Report: '+ name +'</div></div>';
-    }
-    var wrapper= document.createElement('div');
-    
-    wrapper.innerHTML= content;
-
-    grid.insertBefore(wrapper, grid.firstChild);
-    
-    wrapper.style.display = "none";
-
-    imload(  grid, function() {
-        wrapper.style.display = "block";
-        // layout Masonry after each image loads
-        msnry.prepended( wrapper );
-        msnry.layout();
-    });
 }
 
 
@@ -157,51 +147,70 @@ function processFiles(){
 
             //copy file and make standard name
             ft.copy(_files[i], '/tmp/convert', function (err) {
-                if (err) return console.error(err);
+                if (err) {return console.error(err);}
 
-                // try {
-                    pdf2png.convert( '/tmp/convert', { quality: 300 }, function(resp){
-                        if(!resp.success)
-                        {
+                pdf2png.convert( '/tmp/convert', { quality: 300 }, function(resp){
+                    if(!resp.success)
+                    {
+                        constructResult('error', name);
+
+                        Output('Report #'+ name +' conversion failed.<br/>Error message:'+ resp.error +'<br/>')
+                        i++; 
+                        setTimeout(forloop, 0);
+                        return;
+                    }
+                    fs.writeFile(output_location +"\\"+ name +".png", resp.data, function(err) {
+                        if (err) {
+                            constructResult('error', name);
                             
-                            Output('Report #'+ name +' conversion failed.<br/>Error message:'+ resp.error +'<br/>')
+                            Output('Error in png conversion '+ err +'<br/>');
+                            i++; 
+                            setTimeout(forloop, 0);
+                        }
+                        else {
+                            constructResult('success', name);
+
+                            Output('Report #'+ name +' cover converted.<br/>');
                             i++; 
                             setTimeout(forloop, 0);
                             
-                            return;
                         }
-                        fs.writeFile(output_location +"\\"+ name +".png", resp.data, function(err) {
-                            if (err) {
-                                constructResult('error', name);
-                                
-                                Output('Error in png conversion '+ err +'<br/>');
-                                i++; 
-                                setTimeout(forloop, 0);
-                            }
-                            else {
-                                constructResult('success', name);
-
-                                success++;
-                                success_counter.innerHTML(success)
-                                
-                                Output('Report #'+ name +' cover converted.<br/>');
-                                i++; 
-                                setTimeout(forloop, 0);
-                            }
-                        });
-                    }); 
-                // }
-                // catch (e) {
-                //     Output('Report #'+ name +' conversion failed.<br/>')
-                //     i++; 
-                //     setTimeout(forloop, 0);
-                // }
+                    });
+                }); 
             });
 
             
         }
       }
       forloop();
+
+    function constructResult (status, name) {
+        if (status === 'success') {
+            var content = '<div class="grid-item "><div class="grid-item-content"><img src="'+ output_location +'\\'+ name +'.png"/></div><div class="item-title">Report: '+ name +'</div></div>';
+            success++;
+            success_counter.innerHTML = success;
+        } else {
+            var content = '<div class="grid-item"><div class="grid-item-content"><img src=""/></div><div class="item-title">Report: '+ name +'</div></div>';
+            error++;
+            error_counter.innerHTML = error;
+        }
+        var wrapper= document.createElement('div');
+        
+        wrapper.innerHTML= content;
+
+        grid.insertBefore(wrapper, grid.firstChild);
+        
+        wrapper.style.display = "none";
+
+        imload(  grid, function() {
+            wrapper.style.display = "block";
+            // layout Masonry after each image loads
+            msnry.prepended( wrapper );
+            msnry.layout();
+        });
+
+        updateInputs();
+    }
 }
 
 function updateConvertButton(e) {

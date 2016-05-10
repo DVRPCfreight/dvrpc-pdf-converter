@@ -4,7 +4,7 @@
   "main": "./main.js",
   "scripts": {
     "start": "electron .",
-    "epack": "electron-packager ./ --platform=win32 --arch=ia32 --out=distrubtion --overwrite"
+    "epack": "electron-packager ./ --platform=win32 --arch=ia32 --out=distribution --overwrite"
   },
   "devDependencies": {
     "electron-packager": "^7.0.1",
