@@ -10,8 +10,8 @@ app.on('ready', function() {
         // frame: false,
         'auto-hide-menu-bar': true,
         'use-content-size': true,
-        height: 760,
-        width: 960
+        height: 768,
+        width: 1260
     });
 
     mainWindow.loadUrl('file://' + __dirname + '/app/index.html');

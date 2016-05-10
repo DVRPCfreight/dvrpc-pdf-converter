@@ -275,6 +275,16 @@ fieldset {
 .error {
     fill: #dd4b39;
 }
+.card-label {
+    font-size: 1.1vw;
+    line-height: .25vw;
+    /*text-align: left;*/
+}
+.card-right {
+    margin-left: -10px;
+    font-size: 3vw;
+    text-align: center;
+}
 
 #progress-card {
     height: 80px;
