@@ -285,9 +285,20 @@ fieldset {
     font-size: 3vw;
     text-align: center;
 }
+.progress-card.none {
+    border-color: #d2d6de;
+    color: #d2d6de;
+}
+.progress-card.none svg {
+    fill: #d2d6de;
+}
 
-#progress-card {
+.progress-card {
     height: 80px;
+}
+#process-text {
+    font-size: 1vw;
+    padding: 10px 0 7px;
 }
 .row.no-gutters {
   margin-right: 0;
@@ -319,4 +330,9 @@ fieldset {
 }
 ::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.5);
+}
+
+.progress-bar {
+    -webkit-transition: all .5s ease-in-out;
+    transition: all .5s ease-in-out;
 }

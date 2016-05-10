@@ -128,13 +128,22 @@ var success_counter = $id('complete-convert');
 var error_counter = $id('error-convert');
 
 function processFiles(){
-
     var _files = store_filenames;
     //pdf to png
     var i = 0;
     var len = _files.length;
     var success = 0;
     var errors = 0;
+
+    var status_card = $id('status-card');
+    status_card.classList.remove('none');
+
+    var process_text = $id('process-text');
+    process_text.innerHTML = 'Processing file <span id="item-counter">1</span> of '+ len +'...';    
+
+    var item_counter = $id('item-counter');
+    var progress_bar = $id('status-progress-bar');
+    progress_bar.style.width = "2%";
 
 
     function forloop(){
@@ -143,7 +152,7 @@ function processFiles(){
             var file = filestr.splice(-1)[0];
             var name = file.split(".")[0];
 
-            Output('Start processing report #'+name +'<br/>');
+            item_counter.innerHTML = i + 1;
 
             //copy file and make standard name
             ft.copy(_files[i], '/tmp/convert', function (err) {
@@ -188,10 +197,18 @@ function processFiles(){
         if (status === 'success') {
             var content = '<div class="grid-item "><div class="grid-item-content"><img src="'+ output_location +'\\'+ name +'.png"/></div><div class="item-title">Report: '+ name +'</div></div>';
             success++;
+            if(success === 1) {
+                var success_card = $id('success-card');
+                success_card.classList.remove('none');
+            }
             success_counter.innerHTML = success;
         } else {
             var content = '<div class="grid-item"><div class="grid-item-content"><img src=""/></div><div class="item-title">Report: '+ name +'</div></div>';
             error++;
+            if(error === 1) {
+                var error_card = $id('error-card');
+                error_card.classList.remove('none');
+            }
             error_counter.innerHTML = error;
         }
         var wrapper= document.createElement('div');
@@ -209,7 +226,18 @@ function processFiles(){
             msnry.layout();
         });
 
+        if((i + 1) === len) {
+            progress_bar.classList.remove('active');
+            progress_bar.classList.remove('progress-bar-striped');
+            progress_bar.classList.add('progress-bar-success');
+            progress_bar.style.width = '100%';
+            process_text.innerHTML = '<b>Conversion complete!</b>'
+        } else {
+            progress_bar.style.width = ((i+1)/(len))*100 + '%';
+        }
+
         updateInputs();
+        updateConvertButton();
     }
 }
 
@@ -219,7 +247,13 @@ function updateConvertButton(e) {
         b.classList.remove('btn-default');
         b.classList.remove('disabled');
         b.classList.add('btn-success');
-        b.innerHTML = 'Start file conversion!'
+        b.innerHTML = 'Start file conversion!';
+    } else if (file_num === 0){
+        var b = $id('process-btn');
+        b.classList.remove('btn-success');
+        b.classList.add('disabled');
+        b.classList.add('btn-default');
+        b.innerHTML = 'Conversion processed';
     }
 
 }
@@ -266,7 +300,9 @@ output_btn.addEventListener('click', function () {
 
 var process_btn = document.querySelector('#process-btn');
 process_btn.addEventListener('click', function () {
-     processFiles();
+    process_btn.classList.add('disabled');
+    process_btn.innerHTML = 'Conversion in progress...'
+    processFiles();
 });
 
 // masonry shit
