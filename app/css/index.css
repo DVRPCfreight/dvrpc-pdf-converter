@@ -207,7 +207,7 @@ fieldset {
 #results {
     height: 100%;
     background-color: #efefef;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
     -webkit-app-region: no-drag;
 }
 .grid-item, .grid-sizer {
@@ -315,7 +315,12 @@ fieldset {
     padding-right:0px;
 }
 
-
+.status-panel {
+    padding-top: 10px;
+    margin-top: -10px;
+    background-color: #dedede;
+    z-index: 100;
+}
 
 
 ::-webkit-scrollbar {
@@ -335,4 +340,17 @@ fieldset {
 .progress-bar {
     -webkit-transition: all .5s ease-in-out;
     transition: all .5s ease-in-out;
+}
+.scrollable-grid-results {
+    position:absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 110px;
+    padding-top:10px;
+    padding-right:10px;
+    /*height:100%;*/
+    /*margin-right:-15px;*/
+    overflow-y: scroll;
+    -webkit-app-region: no-drag;
 }

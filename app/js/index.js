@@ -162,8 +162,6 @@ function processFiles(){
                     if(!resp.success)
                     {
                         constructResult('error', name);
-
-                        Output('Report #'+ name +' conversion failed.<br/>Error message:'+ resp.error +'<br/>')
                         i++; 
                         setTimeout(forloop, 0);
                         return;
@@ -171,15 +169,11 @@ function processFiles(){
                     fs.writeFile(output_location +"\\"+ name +".png", resp.data, function(err) {
                         if (err) {
                             constructResult('error', name);
-                            
-                            Output('Error in png conversion '+ err +'<br/>');
                             i++; 
                             setTimeout(forloop, 0);
                         }
                         else {
                             constructResult('success', name);
-
-                            Output('Report #'+ name +' cover converted.<br/>');
                             i++; 
                             setTimeout(forloop, 0);
                             
