@@ -210,12 +210,7 @@ fieldset {
     /*overflow-y: scroll;*/
     -webkit-app-region: no-drag;
 }
-.grid-item, .grid-sizer {
-    width:50%;
-    margin-bottom: 8px;
-    padding: 0 5px 8px;
 
-}
 .grid-item-content {
     background-color: #fff;
     padding: 2px;
@@ -368,4 +363,17 @@ fieldset {
     /*margin-right:-15px;*/
     overflow-y: scroll;
     -webkit-app-region: no-drag;
+}
+
+
+.grid-item, .grid-sizer {
+    width: 50%;
+    margin-bottom: 8px;
+    padding: 0 5px 8px;
+
+}
+@media (min-width: 992px) {
+    .grid-item, .grid-sizer {
+        width: 33.33%;
+    }
 }
