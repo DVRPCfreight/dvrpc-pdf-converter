@@ -225,7 +225,7 @@ fieldset {
 }
 .item-title {
     color: #374850;
-    font-size: 1.3em;
+    font-size: 1.1em;
     padding: 5px 15px;
     margin-top: -2px;
     background-color: #efefef;
@@ -333,7 +333,10 @@ fieldset {
     background-color: #dedede;
     z-index: 100;
 }
-
+#intro-text {
+    font-size: 1.3em;
+    padding-top: 10%;
+}
 
 ::-webkit-scrollbar {
     width: 15px;

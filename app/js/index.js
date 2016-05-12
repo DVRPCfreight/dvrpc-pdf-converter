@@ -295,8 +295,10 @@ output_btn.addEventListener('click', function () {
 var process_btn = document.querySelector('#process-btn');
 process_btn.addEventListener('click', function () {
     process_btn.classList.add('disabled');
-    process_btn.innerHTML = 'Conversion in progress...'
+    process_btn.innerHTML = 'Conversion in progress...';
     processFiles();
+    var intro = $id('intro-text');
+    intro.style.display = 'none';
 });
 
 // masonry shit
