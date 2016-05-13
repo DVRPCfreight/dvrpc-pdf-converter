@@ -385,8 +385,10 @@
     "type.less",
     "grid.less",
     "buttons.less",
-    "button-groups.less"
+    "responsive-utilities.less",
+    "button-groups.less",
+    "progress-bars.less"
   ],
   "js": [],
-  "customizerUrl": "http://getbootstrap.com/customize/?id=710ede757cafbe0e839019f2ca99d1c3"
+  "customizerUrl": "http://getbootstrap.com/customize/?id=a6cc1001e660a4752215d6d15d5ede73"
 }
